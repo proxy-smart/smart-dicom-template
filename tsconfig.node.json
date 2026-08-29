@@ -1,4 +1,6 @@
 {
-  "extends": "../../config/tsconfig.smart-node.json",
-  "include": ["vite.config.ts"]
+  "extends": "@max-health-inc/config/tsconfig/node.json",
+  "include": [
+    "vite.config.ts"
+  ]
 }

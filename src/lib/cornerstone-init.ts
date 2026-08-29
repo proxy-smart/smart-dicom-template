@@ -10,8 +10,10 @@ export async function ensureCornerstoneInit(): Promise<void> {
     import("@cornerstonejs/dicom-image-loader"),
   ])
 
-  await core.init()
-  await loader.init({
+  // Both inits are synchronous in Cornerstone's shipped code, despite reading
+  // like async setup; awaiting them is a no-op the type checker flags.
+  core.init()
+  loader.init({
     maxWebWorkers: Math.min(navigator.hardwareConcurrency || 1, 4),
   })
 

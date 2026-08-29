@@ -2,7 +2,7 @@
   "name": "smart-dicom-template",
   "displayName": "SMART DICOM Algorithm Template",
   "description": "Starter kit for building SMART on FHIR imaging algorithm apps. Clone, implement your algorithm in src/algorithm.ts, and deploy as a SMART app.",
-  "private": true,
+  "private": false,
   "version": "0.3.30-alpha.202608291247.2c3bec7bd",
   "type": "module",
   "scripts": {
@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@max-health-inc/config": "^3.3.0",
     "@originjs/vite-plugin-commonjs": "^1.0.3",
     "@types/node": "^26.4.0",
     "@types/react": "^19.2.18",
@@ -49,5 +50,10 @@
     "typescript": "6.0.3",
     "typescript-eslint": "^8.68.0",
     "vite": "^8.2.2"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Max-Health-Inc/smart-dicom-template.git"
   }
 }

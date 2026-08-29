@@ -1,0 +1,38 @@
+# Bun Configuration
+# https://bun.sh/docs/runtime/configuration
+
+[install]
+# Use isolated installs for better monorepo dependency isolation
+linker = "isolated"
+
+# Allow newer packages for faster access to updates
+# Set to 0 to disable the 7-day waiting period
+# Note: This reduces supply chain attack protection
+minimumReleaseAge = 0 # Allow all packages regardless of age
+
+[install.scopes]
+# Resolve @max-health-inc packages (e.g. shared-ui) from GitHub Packages.
+# GitHub Packages npm requires a token even for public packages, so bun reads
+# it from $GH_PACKAGES_TOKEN. In CI/Docker this is the workflow GITHUB_TOKEN
+# (packages: read); locally, `export GH_PACKAGES_TOKEN=$(gh auth token)`.
+"@max-health-inc" = { url = "https://npm.pkg.github.com", token = "$GH_PACKAGES_TOKEN" }
+# @max-network/i18n ships the shared translation tooling (tools/*.py) that maintains
+# frontend/ui/src/i18n/translations/translations.json. Separate org, same registry and
+# token. Locally: `export GH_PACKAGES_TOKEN=$(gh auth token)`.
+"@max-network" = { url = "https://npm.pkg.github.com", token = "$GH_PACKAGES_TOKEN" }
+# NOTE: the brand-token contract is now the public-npm package `brandc` (renamed
+# from @max-network/css), so no private-registry scope/token is needed for it.
+
+# Security scanner (Socket.dev)
+# [install.security]
+# scanner = "@socketsecurity/bun-security-scanner"
+
+[console]
+# Control console.log() depth
+depth = 5
+
+[test]
+# Enable concurrent testing for I/O-bound tests
+concurrentTestGlob = "**/integration/**/*.test.ts"
+concurrent = true
+maxConcurrency = 20

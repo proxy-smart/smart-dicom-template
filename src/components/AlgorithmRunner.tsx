@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState } from "react"
 import type { ImagingStudyUvIps as ImagingStudy } from "@max-health-inc/fhir-ips"
 import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Spinner } from "@proxy-smart/shared-ui"
-import { smartAuth } from "@/lib/smart-auth"
-import { fhirBaseUrl } from "@/lib/smart-auth"
+import { fhirBaseUrl, smartAuth } from "@/lib/smart-auth"
 import {
   getStudyInstanceUID,
   getPrimaryModality,
@@ -190,7 +189,7 @@ export function AlgorithmRunner() {
         <div className="flex items-center gap-3">
           <Button
             size="lg"
-            onClick={() => handleRun(selectedStudy)}
+            onClick={() => { void handleRun(selectedStudy) }}
             disabled={runState === "loading-images" || runState === "running"}
           >
             {runState === "loading-images" ? (
@@ -211,7 +210,7 @@ export function AlgorithmRunner() {
             )}
           </Button>
           {runState === "done" && (
-            <Button variant="outline" onClick={() => handleRun(selectedStudy)}>
+            <Button variant="outline" onClick={() => { void handleRun(selectedStudy) }}>
               <RefreshCw className="size-4" />
               Re-run
             </Button>
