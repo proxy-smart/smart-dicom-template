@@ -1,0 +1,21 @@
+name: Check
+
+# A template people copy, so a broken main is worse than usual: it is the first
+# thing a new project inherits.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  check:
+    uses: proxy-smart/.github/.github/workflows/check.yml@main
+    with:
+      install: bun install
+      lint: bun run lint
+      typecheck: bun run typecheck
+      build: bun run build
+    secrets: inherit
