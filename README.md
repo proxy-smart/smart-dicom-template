@@ -6,43 +6,23 @@ SMART launch and token handling, and a place to put your algorithm.
 Use it with GitHub's **Use this template**, or:
 
 ```bash
-bun create github.com/Max-Health-Inc/smart-dicom-template my-imaging-app
+bun create github.com/proxy-smart/smart-dicom-template my-imaging-app
 ```
 
 Licensed **Apache-2.0** — copy it, change it, ship it closed. That is the point of
 a template, and it is deliberately not the AGPL-or-commercial licence the
-[Proxy Smart](https://github.com/Max-Health-Inc/proxy-smart) server carries.
+[Proxy Smart](https://github.com/proxy-smart/proxy-smart) server carries.
 
-Shared build configuration comes from the published `@max-health-inc/config`, so
-this repository stands alone; it needs no Proxy Smart checkout. Reaching GitHub
-Packages needs a token: `export GH_PACKAGES_TOKEN=$(gh auth token)`.
+**Every dependency comes from public npm.** `bun install` needs no registry
+configuration, no token and no org membership, and the build config, ESLint config,
+UI components and auth shell all live in this repository rather than in a shared
+package. Change any of them without waiting on anyone.
 
 `VITE_BASE` sets the path the app is served from (default `/`).
 
 ---
 
-A starting point for building a SMART on FHIR imaging app: Cornerstone3D viewer,
-SMART launch and token handling, and a place to put your algorithm.
-
-Use it with GitHub's **Use this template**, or:
-
-```bash
-bun create github.com/Max-Health-Inc/smart-dicom-template my-imaging-app
-```
-
-Licensed **Apache-2.0** — copy it, change it, ship it closed. That is the point of
-a template, and it is deliberately not the AGPL-or-commercial licence the
-[Proxy Smart](https://github.com/Max-Health-Inc/proxy-smart) server carries.
-
-Shared build configuration comes from the published `@max-health-inc/config`, so
-this repository stands alone; it needs no Proxy Smart checkout. Reaching GitHub
-Packages needs a token: `export GH_PACKAGES_TOKEN=$(gh auth token)`.
-
-`VITE_BASE` sets the path the app is served from (default `/`).
-
----
-
-A starter kit for building SMART on FHIR imaging algorithm apps with [Proxy Smart](https://github.com/Max-Health-Inc/proxy-smart).
+A starter kit for building SMART on FHIR imaging algorithm apps with [Proxy Smart](https://github.com/proxy-smart/proxy-smart).
 
 ## Quick Start
 
@@ -142,4 +122,4 @@ This template requests:
 
 ## License
 
-Part of [Proxy Smart](https://github.com/Max-Health-Inc/proxy-smart). See [LICENSE](../../LICENSE).
+Apache-2.0 — see [LICENSE](LICENSE). Built for [Proxy Smart](https://github.com/proxy-smart/proxy-smart), which is licensed separately.
