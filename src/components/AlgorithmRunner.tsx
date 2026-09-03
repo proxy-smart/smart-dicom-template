@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from "react"
-import type { ImagingStudyUvIps as ImagingStudy } from "@max-health-inc/fhir-ips"
-import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Spinner } from "@proxy-smart/shared-ui"
+import type { ImagingStudy } from "fhir/r4"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Spinner } from "@/components/ui/spinner"
 import { fhirBaseUrl, smartAuth } from "@/lib/smart-auth"
 import {
   getStudyInstanceUID,
