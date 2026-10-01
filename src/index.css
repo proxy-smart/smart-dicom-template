@@ -2,12 +2,35 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
-@source "../node_modules/@proxy-smart/shared-ui/src";
-@import "@proxy-smart/shared-ui/theme.css";
-/* Maps the contract tokens onto Tailwind namespaces by reference. Generated upstream — never hand-maintain here. */
+
+/*
+ * The design tokens, taken straight from `brandc`. All THREE entry points are required and
+ * none is sufficient alone:
+ *   theme.css    — the token VALUES (colours, radius, shadow, font-sans)
+ *   tailwind.css — the `@theme inline` bridge that maps those onto Tailwind utility names.
+ *                  Without it `bg-background` silently falls back to Tailwind's stock palette.
+ *   base.css     — restores the pointer cursor Tailwind v4 dropped. Taken into layer(base) so
+ *                  an explicit `cursor-*` utility still outranks it.
+ *
+ * Rebrand by depending on your own token package here; nothing below reads a colour directly.
+ */
+@import "brandc/theme.css";
 @import "brandc/tailwind.css";
+@import "brandc/base.css" layer(base);
 
 @custom-variant dark (&:is(.dark *));
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
 
 /* App-local deltas: self-hosted Geist, plus the radius steps past --radius-lg. */
 @theme inline {
