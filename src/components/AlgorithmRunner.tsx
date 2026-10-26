@@ -3,13 +3,12 @@ import type { ImagingStudy } from "fhir/r4"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Spinner } from "@/components/ui/spinner"
-import { fhirBaseUrl, smartAuth } from "@/lib/smart-auth"
+import { fhir, getAccessToken, smartAuth } from "@/lib/smart-auth"
 import {
   getStudyInstanceUID,
   getPrimaryModality,
   getStudyTitle,
   getModalityInfo,
-  getAccessToken,
   getCornerstoneDicomweb,
   getStudyThumbnailUrl,
 } from "@/lib/dicomweb"
@@ -20,38 +19,29 @@ import { Play, ImageIcon, CheckCircle, AlertTriangle, Info, RefreshCw } from "lu
 type RunState = "idle" | "loading-images" | "running" | "done" | "error"
 
 export function AlgorithmRunner() {
+  const [patient] = useState(() => smartAuth.getToken()?.patient)
   const [studies, setStudies] = useState<ImagingStudy[]>([])
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(!!patient)
   const [selectedStudy, setSelectedStudy] = useState<ImagingStudy | null>(null)
   const [runState, setRunState] = useState<RunState>("idle")
   const [result, setResult] = useState<AlgorithmResult | null>(null)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(patient ? null : "No patient in the launch context")
 
   // ── Fetch ImagingStudy resources ──────────────────────────────────
 
   useEffect(() => {
-    const token = smartAuth.getToken()
-    if (!token) return
+    if (!patient) return
 
-    fetch(`${fhirBaseUrl}/ImagingStudy?patient=${token.patient}&_count=50`, {
-      headers: { Authorization: `Bearer ${token.access_token}` },
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error(`FHIR search failed: ${res.status}`)
-        return res.json()
-      })
+    fhir.read().imagingStudy().search({ patient, _count: 50 })
       .then((bundle) => {
-        const entries = (bundle.entry ?? [])
-          .map((e: { resource: ImagingStudy }) => e.resource)
-          .filter((r: ImagingStudy) => r.resourceType === "ImagingStudy")
-        setStudies(entries)
+        setStudies((bundle.entry ?? []).flatMap((e) => (e.resource ? [e.resource] : [])))
       })
-      .catch((err) => {
+      .catch((err: unknown) => {
         console.error("Failed to fetch ImagingStudy resources:", err)
         setError(err instanceof Error ? err.message : "Failed to load studies")
       })
       .finally(() => setLoading(false))
-  }, [])
+  }, [patient])
 
   // ── Run the algorithm on the selected study ───────────────────────
 
@@ -84,12 +74,11 @@ export function AlgorithmRunner() {
 
       // 2. Run the algorithm
       setRunState("running")
-      const token = smartAuth.getToken()
       const algorithmResult = await runAlgorithm({
         studyUID,
         imageIds: allImageIds,
         imagingStudy: study,
-        patientReference: `Patient/${token?.patient ?? "unknown"}`,
+        patientReference: `Patient/${patient ?? "unknown"}`,
         accessToken: getAccessToken(),
       })
 
@@ -100,7 +89,7 @@ export function AlgorithmRunner() {
       setError(err instanceof Error ? err.message : "Algorithm execution failed")
       setRunState("error")
     }
-  }, [])
+  }, [patient])
 
   // ── Render ────────────────────────────────────────────────────────
 

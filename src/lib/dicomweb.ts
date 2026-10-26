@@ -1,5 +1,5 @@
 import { config } from "@/config"
-import { smartAuth } from "@/lib/smart-auth"
+import { getAccessToken } from "@/lib/smart-auth"
 import {
   createDicomwebClient,
   getStudyInstanceUID,
@@ -15,7 +15,7 @@ const dicomwebBase = `${config.proxyBase || window.location.origin}/dicomweb`
 
 const dw = createDicomwebClient({
   baseUrl: dicomwebBase,
-  getAccessToken: () => smartAuth.getToken()?.access_token ?? null,
+  getAccessToken,
 })
 
 // -- Cornerstone-integrated client (lazy) --
@@ -28,7 +28,7 @@ export function initCornerstoneDicomweb(
   if (csDw) return csDw
   csDw = createCornerstoneDicomweb({
     baseUrl: dicomwebBase,
-    getAccessToken: () => smartAuth.getToken()?.access_token ?? null,
+    getAccessToken,
     cornerstone: { dicomImageLoader },
   })
   return csDw
@@ -55,8 +55,4 @@ export function getSeriesThumbnailUrl(studyUID: string, seriesUID: string): stri
 
 export function getDicomwebAuthHeaders(): HeadersInit {
   return dw.authHeaders()
-}
-
-export function getAccessToken(): string | null {
-  return smartAuth.getToken()?.access_token ?? null
 }

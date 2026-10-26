@@ -1,4 +1,5 @@
-import { getAccessToken, initCornerstoneDicomweb } from "@/lib/dicomweb"
+import { initCornerstoneDicomweb } from "@/lib/dicomweb"
+import { getAccessToken } from "@/lib/smart-auth"
 
 let initialized = false
 
